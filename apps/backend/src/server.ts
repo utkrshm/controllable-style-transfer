@@ -9,38 +9,11 @@ import { DEFAULT_CONTROLS, type QualityPreset, type StyleControls } from "./type
 
 const app = Fastify({ logger: true });
 
-const corsOrigins = (process.env.CORS_ORIGIN ?? "")
-  .split(",")
-  .map((origin) => origin.trim())
-  .filter(Boolean);
-
-function resolveCorsOrigin(originHeader?: string): string {
-  if (!originHeader) return "*";
-  if (corsOrigins.length === 0) return originHeader;
-  return corsOrigins.includes(originHeader) ? originHeader : "";
-}
-
 await app.register(multipart, {
   limits: {
     fileSize: MAX_UPLOAD_SIZE_MB * 1024 * 1024,
     files: 2,
   },
-});
-
-app.addHook("onRequest", async (request, reply) => {
-  const requestOrigin = request.headers.origin;
-  const allowedOrigin = resolveCorsOrigin(requestOrigin);
-
-  if (allowedOrigin) {
-    reply.header("Access-Control-Allow-Origin", allowedOrigin);
-    reply.header("Vary", "Origin");
-  }
-  reply.header("Access-Control-Allow-Methods", "GET,POST,OPTIONS");
-  reply.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
-
-  if (request.method === "OPTIONS") {
-    return reply.code(204).send();
-  }
 });
 
 const parseIntentSchema = z.object({
