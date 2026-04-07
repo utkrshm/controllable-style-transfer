@@ -13,7 +13,7 @@ export interface ParsedIntent {
 }
 
 export const DEFAULT_CONTROLS: StyleControls = {
-  color_transfer: 0.7,
-  texture_transfer: 0.4,
-  brushstroke_transfer: 0.5,
+  color_transfer: 1.0,
+  texture_transfer: 1.0,
+  brushstroke_transfer: 1.0,
 };
