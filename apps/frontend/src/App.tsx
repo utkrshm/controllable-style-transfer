@@ -24,6 +24,12 @@ const CONTROL_LABELS: Record<keyof StyleControls, string> = {
   brushstroke_transfer: "Brushstroke Transfer",
 };
 
+const API_BASE = (import.meta.env.VITE_BACKEND_URL as string | undefined)?.replace(/\/+$/, "") ?? "";
+
+function apiUrl(path: string): string {
+  return API_BASE ? `${API_BASE}${path}` : path;
+}
+
 function App() {
   const [contentImage, setContentImage] = useState<File | null>(null);
   const [styleImage, setStyleImage] = useState<File | null>(null);
@@ -68,7 +74,7 @@ function App() {
     try {
       let resolvedControls = controls;
       if (prompt.trim().length > 0) {
-        const parseRes = await fetch("/api/parse-intent", {
+        const parseRes = await fetch(apiUrl("/api/parse-intent"), {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ prompt }),
@@ -87,7 +93,7 @@ function App() {
       form.append("qualityPreset", "preview");
       form.append("controls", JSON.stringify(resolvedControls));
 
-      const res = await fetch("/api/style-transfer", {
+      const res = await fetch(apiUrl("/api/style-transfer"), {
         method: "POST",
         body: form,
       });
