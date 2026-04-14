@@ -16,10 +16,8 @@ import styleStarry from "./samples/style-starry.svg";
 import styleWave from "./samples/style-wave.svg";
 import styleMosaic from "./samples/style-mosaic.svg";
 
-const STYLE_NET_URL =
-  "https://reiinakano.github.io/arbitrary-image-stylization-tfjs/saved_model_style_js/model.json";
-const TRANSFORM_NET_URL =
-  "https://reiinakano.github.io/arbitrary-image-stylization-tfjs/saved_model_transformer_js/model.json";
+const STYLE_NET_URL = "/controllable-style-transfer/models/style/model.json";
+const TRANSFORM_NET_URL = "/controllable-style-transfer/models/transformer/model.json";
 const MAX_CONTENT_SIZE = 800;
 const SOURCE_DOWNSCALE_THRESHOLD = 4096;
 const LIVE_DEBOUNCE_MS = 250;
