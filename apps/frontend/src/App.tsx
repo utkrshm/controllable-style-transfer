@@ -17,9 +17,9 @@ import styleWave from "./samples/style-wave.svg";
 import styleMosaic from "./samples/style-mosaic.svg";
 
 const STYLE_NET_URL =
-  "/model-proxy/arbitrary-image-stylization-tfjs/saved_model_style_js/model.json";
+  "https://reiinakano.github.io/arbitrary-image-stylization-tfjs/saved_model_style_js/model.json";
 const TRANSFORM_NET_URL =
-  "/model-proxy/arbitrary-image-stylization-tfjs/saved_model_transformer_js/model.json";
+  "https://reiinakano.github.io/arbitrary-image-stylization-tfjs/saved_model_transformer_js/model.json";
 const MAX_CONTENT_SIZE = 800;
 const SOURCE_DOWNSCALE_THRESHOLD = 4096;
 const LIVE_DEBOUNCE_MS = 250;
