@@ -5,9 +5,11 @@ export default defineConfig({
   plugins: [react()],
   server: {
     proxy: {
-      "/api": {
-        target: "http://localhost:3000",
+      "/model-proxy": {
+        target: "https://reiinakano.github.io",
         changeOrigin: true,
+        followRedirects: true,
+        rewrite: (path) => path.replace(/^\/model-proxy/, ""),
       },
     },
   },

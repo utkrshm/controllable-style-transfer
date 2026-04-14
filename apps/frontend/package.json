@@ -1,6 +1,6 @@
 {
   "name": "@style-transfer/frontend",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "type": "module",
   "scripts": {
@@ -9,6 +9,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@tensorflow/tfjs": "^4.17.0",
+    "@tensorflow/tfjs-backend-webgpu": "^4.17.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
   },

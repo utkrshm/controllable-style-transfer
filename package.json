@@ -1,15 +1,14 @@
 {
   "name": "style-transfer-monorepo",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "workspaces": [
-    "apps/backend",
     "apps/frontend"
   ],
   "scripts": {
-    "dev:backend": "npm --prefix apps/backend run dev",
+    "dev": "npm --prefix apps/frontend run dev",
     "dev:frontend": "npm --prefix apps/frontend run dev",
-    "landing": "npm run dev:frontend",
-    "build": "npm --prefix apps/frontend run build && npm --prefix apps/backend run build"
+    "build": "npm --prefix apps/frontend run build",
+    "preview": "npm --prefix apps/frontend run preview"
   }
 }

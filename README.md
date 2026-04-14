@@ -1,126 +1,71 @@
-# Controllable Style Transfer App
+# Style Transfer
 
-A personal project for controllable artistic style transfer, where users upload a **content image** and a **style image**, then tune transfer intensity for:
+A client-side neural style transfer web app. Upload a **content** image and a **style** image, pick a stylization strength, and get a stylized result — all rendered in your browser via WebGPU.
 
-- Color
-- Texture
-- Brushstroke
-
----
-
-## What It Is
-
-This is a monorepo with:
-
-- `apps/frontend`: React + Vite UI for uploading images, tuning controls, generating output, and downloading results.
-- `apps/backend`: Fastify + Transformers.js inference service for style transfer.
-
-The product is intentionally simple and no-auth, built for quick experimentation.
-
----
+No backend. No account. No upload. The model runs on your machine.
 
 ## How It Works
 
-1. User uploads content + style images in the frontend.
-2. User provides (optional) creative intent text.
-3. Backend parses intent into control weights.
-4. Backend runs style transfer using the selected weights.
-5. Frontend receives and displays output image, with download support.
-
-Current control dimensions:
-
-- `color_transfer`
-- `texture_transfer`
-- `brushstroke_transfer`
-
----
+- **Model**: Google's [Magenta `arbitrary-image-stylization-v1-256`](https://tfhub.dev/google/tfjs-model/magenta/arbitrary-image-stylization-v1-256/prediction/1), a pretrained feed-forward neural network.
+- **Runtime**: [TensorFlow.js](https://www.tensorflow.org/js) with the WebGPU backend (falls back to WebGL if WebGPU is unavailable).
+- **Pipeline**:
+  1. Style prediction network → produces a style embedding from the style image.
+  2. Identity embedding produced from the content image.
+  3. Strength slider interpolates between them: `strength * style + (1 - strength) * identity`.
+  4. Transfer network consumes the content image + blended embedding → stylized output.
 
 ## Project Structure
 
 ```text
 style-transfer/
 ├─ apps/
-│  ├─ frontend/   # React + Vite UI
-│  └─ backend/    # Fastify API + style transfer pipeline
-├─ package.json   # workspace scripts
+│  └─ frontend/          # React + Vite UI — the whole app
+│     └─ src/
+│        ├─ App.tsx      # Model loading, inference, UI
+│        ├─ styles.css   # Design system
+│        ├─ samples/     # Bundled sample images
+│        └─ main.tsx
+├─ package.json          # Workspace scripts
 └─ README.md
 ```
 
----
+`apps/backend/` from an earlier architecture is preserved on disk but is not wired into any build or dev script.
 
-## Steps to Setup
+## Setup
 
-### Prerequisites
-
-- Node.js 18+ (Node 20 recommended)
-- npm 9+
-
-### 1. Install dependencies
+**Prerequisites**: Node.js 20+, npm 9+. A modern browser; Chrome/Edge 113+ for WebGPU.
 
 ```bash
 npm install
 ```
 
-### 2. Configure frontend env
-
-Create/edit:
-
-- `apps/frontend/.env`
-
-Example:
+## Run
 
 ```bash
-VITE_BACKEND_URL=http://localhost:3000
+npm run dev
 ```
 
-If `VITE_BACKEND_URL` is empty, frontend uses relative `/api` paths (works with local proxy in dev).
+Opens on `http://localhost:5173`.
 
-### 3. Run backend
+On first visit the app downloads ~15–20 MB of model weights — subsequent loads are cached by the browser.
+
+## Build
 
 ```bash
-npm run dev:backend
+npm run build
 ```
 
-Backend default: `http://localhost:3000`
-Health check: `GET /api/health`
+Outputs a static bundle to `apps/frontend/dist/`. Serve it with any static host (e.g. `npm run preview`).
 
-### 4. Run frontend
+## Browser Support
 
-```bash
-npm run dev:frontend
-```
+| Backend | Browsers | Performance |
+|---|---|---|
+| WebGPU | Chrome 113+, Edge 113+, Safari 18+ | Best |
+| WebGL | Everything modern | Fallback — still usable |
 
-Frontend default: `http://localhost:5173`
+The app picks WebGPU first and silently falls back to WebGL if initialization fails. The active backend is shown in the header badge.
 
----
+## License
 
-## Scripts
-
-- `npm run dev:frontend` — run frontend dev server
-- `npm run dev:backend` — run backend dev server
-- `npm run landing` — alias for frontend dev server
-- `npm run build` — build frontend and backend
-
----
-
-## Demo
-
-Demo video:
-
----
-
-## Known Notes
-
-- This project is currently in a local-first/dev-friendly stage.
-- Backend inference is server-side (not pure client-side inference).
-- Performance depends on server hardware for style transfer.
-
----
-
-## Attribution
-
-### Font
-
-- Font: `Hiro Misake`
-- License: `Freeware, Non-Commercial`
-- Source: https://www.fontspace.com/hiro-misake-font-f160364
+Personal project. Model weights are Google's under their TFHub terms.
